@@ -53,6 +53,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 
 // monitor page cmd
 hwaddr_t page_translate_additional(lnaddr_t addr,int* flag){
+	
 	if (cpu.cr0.protect_enable == 1 && cpu.cr0.paging == 1){
 		//printf("%x\n",addr);
 		uint32_t dir = addr >> 22;
@@ -83,7 +84,9 @@ hwaddr_t page_translate_additional(lnaddr_t addr,int* flag){
 		uint32_t addr_start = second_content.addr;
 		hwaddr_t hwaddr = (addr_start << 12) + offset;
 		return hwaddr;
-	}else return addr;
+	} else {
+		return addr;
+	}
 }
 
 /////////////////////////////////////////////////////////
@@ -110,6 +113,10 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	//dram_write(addr, len, data);
 }
 
+// 访问内存的接口函数相关的源代码存在 memory.c 文件中，
+// 其中 lnaddr_read 和 lnaddr_write 两个函数用来对内存进行读写，
+// lnaddr_read 函数需要传入两个参数，分别为起始地址和扫描长度。
+
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	//printf("%x\n",addr);
 /*To Avoid Potential Errors (len = 1 + 3)*/
@@ -117,6 +124,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 // #ifdef DEBUG
 // 	assert(len == 1 || len == 2 || len == 4);
 // #endif
+
 	uint32_t now_offset = addr & 0xfff;
 	if (now_offset + len -1 > 0xfff){
 		// Assert(0,"Cross the page boundary");
@@ -125,10 +133,11 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 		uint32_t addr_l = lnaddr_read(addr + l,len - l);
 		uint32_t val = (addr_l << (l << 3)) | addr_r;
 		return val;
-	}else {
+	} else {
 		hwaddr_t hwaddr = page_translate(addr);
 		return hwaddr_read(hwaddr,len);
 	}
+	
 	// return hwaddr_read(addr, len);
 }
 

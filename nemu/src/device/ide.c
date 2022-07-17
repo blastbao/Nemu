@@ -20,7 +20,10 @@ static FILE *disk_fp;
 void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 	assert(byte_cnt <= 512);
 	int ret;
+	
+
 	if(is_write) {
+		
 		if(addr - IDE_PORT == 0 && len == 4) {
 			/* write 4 bytes data to disk */
 			assert(ide_write);
@@ -33,7 +36,9 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 				ide_port_base[7] = 0x40;
 			}
 		}
+
 		else if(addr - IDE_PORT == 7) {
+			
 			if(ide_port_base[7] == 0x20 || ide_port_base[7] == 0x30) {
 				/* command: read/write */
 				sector = (ide_port_base[6] & 0x1f) << 24 | ide_port_base[5] << 16
@@ -54,6 +59,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 					ide_write = true;
 				}
 			}
+			
 			else if (ide_port_base[7] == 0xc8) {
 				/* command: DMA read */
 

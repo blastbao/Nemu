@@ -3,7 +3,10 @@
 
 #include "all-instr.h"
 
+// 定义新的 helper_fun 类型为指向某种函数的指针，该函数以一个 swaddr_t 为参数并返回 int 类型。
 typedef int (*helper_fun)(swaddr_t);
+
+
 static make_helper(_2byte_esc);
 
 #define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7) \
@@ -93,6 +96,8 @@ make_group(group7,
 
 /* TODO: Add more instructions!!! */
 
+// opcode_table 是一成员为 helper_fun 类型的函数指针数组。
+// 
 helper_fun opcode_table [256] = {
 /* 0x00 */	add_r2rm_b, add_r2rm_v, add_rm2r_b, add_rm2r_v,
 /* 0x04 */	add_i2a_b, add_i2a_v, inv, inv,
@@ -159,6 +164,7 @@ helper_fun opcode_table [256] = {
 /* 0xf8 */	inv, inv, inv, inv,
 /* 0xfc */	cld, std, group4, group5
 };
+
 
 helper_fun _2byte_opcode_table [256] = {
 /* 0x00 */	group6, group7, inv, inv, 
@@ -227,6 +233,10 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0xfc */	inv, inv, inv, inv
 };
 
+
+// cpu_exec 是一个循环执行 exec(eip) 函数，exec 由 make_helper 宏定义。
+//
+// exec 调用的是 opcode_table 对当前 eip 指向的指令进行 dispatch 。
 make_helper(exec) {
 	ops_decoded.opcode = instr_fetch(eip, 1);
 	return opcode_table[ ops_decoded.opcode ](eip);

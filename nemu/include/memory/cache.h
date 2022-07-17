@@ -27,8 +27,10 @@ typedef struct{
     uint8_t data[Cache_L1_Block_Size]; // 64B
     uint32_t tag;
     bool valid;
-}Cache_L1;
+} Cache_L1 ;
 
+
+// L1 包含 1024 个 block 
 Cache_L1 cache1[Cache_L1_Size/Cache_L1_Block_Size];
 
 /*

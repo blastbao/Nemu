@@ -84,10 +84,16 @@ static void init_cr0(){
 	cpu.cr0.paging = 0;// paging mode
 }
 
+
+// 设置 EFLAGS 初始值
 static void init_eflags(){
 	cpu.EFLAGS = 0x00000002;
 }
+
+
+// [入口]
 void restart() {
+
 	/* Perform some initialization to restart a program */
 	init_eflags();
 
@@ -97,6 +103,7 @@ void restart() {
 #endif
 
 	/* Read the entry code into memory. */
+	// 
 	load_entry();
 
 	/* Set the initial instruction pointer. */

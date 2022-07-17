@@ -4,9 +4,15 @@
 #include "nemu.h"
 #include "cpu/decode/operand.h"
 extern uint8_t current_sreg;
+
 /* All function defined with 'make_helper' return the length of the operation. */
+//
+//
+// 
 #define make_helper(name) int name(swaddr_t eip)
 
+
+// 读取指定长度信息
 static inline uint32_t instr_fetch(swaddr_t addr, size_t len) {
 	uint8_t past_sreg = current_sreg;
 	current_sreg = R_CS;
@@ -22,6 +28,7 @@ static inline int idex(swaddr_t eip, int (*decode)(swaddr_t), void (*execute) (v
 	execute();
 	return len + 1;	// "1" for opcode
 }
+
 
 /* shared by all helper function */
 extern Operands ops_decoded;

@@ -80,6 +80,22 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	fclose(fp);
 }
+
+// uint32_t GetMarkValue(char* str){
+// 	int i;
+// 	for (i = 0; i < nr_symtab_entry; i++){
+// 		if ( symtab 表中该项为 OBJECT ){
+// 			取出 str 相同长度的串，并判断其是否相等，相等返回其 VALUE 
+// 		}
+// 	}
+// 	return 0;
+// }
+// 
+//
+// 关于如何判断表项类型以及如何取值，在 elf.c 中有给出 symtab 的定义，
+// 跳转至 lib-common/uclibc/include/elf.h 中查看，便可知晓判断的方式。
+//
+// 
 uint32_t GetMarkValue(char* str,bool* success){
 	int i;
 	for (i = 0; i < nr_symtab_entry; i++){

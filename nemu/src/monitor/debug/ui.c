@@ -69,6 +69,18 @@ static int cmd_info(char *args) {
 	return 0;
 }
 
+
+
+// 内存扫描命令的格式为 `x N EXPR` ，N 表示扫描长度，EXPR 为起始内存。
+//
+// 因此得出解题步骤：
+// 	1）传入 cmd_x() 函数的参数为字符串，需要利用 strtok() 函数分别得到 N 和 EXPR 部分的字符串，
+//	  再利用 sscanf() 函数将字符串 N 转化为十进制整型数 len ，把字符串 EXPR 转化为十六进制的数 address 。
+// 	2）任务中要求以 16 进制形式输出连续的 N 个 4 字节，因此，将 address 和 4 传入 lnaddr_read 函数就可以得到，
+//    再用 for 循环循环 len 次，每次循环时起始地址加 4 ，就可以实现内存的扫描。
+//
+// 
+
 static int cmd_x(char *args) {
 	TestCorrect(args == NULL);
 	current_sreg = R_DS;
@@ -218,14 +230,24 @@ static int cmd_help(char *args) {
 	return 0;
 }
 
+
+// ui.c 经过一些列的初始化之后进入到 ui_mainloop 函数
+
+
+
 void ui_mainloop() {
 	while (1) {
+
+
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
 
+		
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
 		if (cmd == NULL) { continue; }
+
+
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
@@ -235,10 +257,12 @@ void ui_mainloop() {
 			args = NULL;
 		}
 
+
 #ifdef HAS_DEVICE
 		extern void sdl_clear_event_queue(void);
 		sdl_clear_event_queue();
 #endif
+
 
 		int i;
 		for (i = 0; i < NR_CMD; i ++) {
@@ -247,6 +271,7 @@ void ui_mainloop() {
 				break;
 			}
 		}
+
 
 		if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
 	}
