@@ -11,10 +11,12 @@ static void do_execute () {
 	cpu.OF = 0;
 	cpu.ZF = !ret;
     cpu.SF = ret >> ((DATA_BYTE << 3) - 1);
+
 	ret ^= ret >> 4;
     ret ^= ret >> 2;
     ret ^= ret >> 1;
     ret &= 1;
+    
     cpu.PF = !ret;
 	print_asm_template2();
 }

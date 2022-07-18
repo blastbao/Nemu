@@ -34,7 +34,6 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 
 #if DATA_BYTE == 4
 
-
 // mov_r2cr() ==> rx => crx
 make_helper(mov_cr2r) {
 	uint8_t modrm= instr_fetch(eip + 1,1);
